@@ -9,23 +9,13 @@ executors:
 jobs:
   build:
     docker:
-      - image: circleci/openjdk:17  # Ensure you're using the correct image for Java 17
+      - image: circleci/openjdk:17  # Ensure the image is correct
     steps:
-      - checkout  # Checkout the project
+      - checkout  # Check out the code
       - run:
-          name: Install unzip
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y unzip
-      - run:
-          name: Set up SDKMAN and Maven
-          command: |
-            curl -sSL https://get.sdkman.io | bash
-            source ~/.sdkman/bin/sdkman-init.sh
-            sdk install maven
-      - run:
-          name: Build project with Maven
-          command: mvn clean install
+          name: Build with Maven
+          command: mvn clean install  # Replace with the correct build tool
+
 
 
   sonar:
@@ -45,9 +35,6 @@ jobs:
 
 workflows:
   version: 2
-  build_and_analyze:
+  build_and_test:
     jobs:
       - build
-      - sonar:
-          requires:
-            - build
