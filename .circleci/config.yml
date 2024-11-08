@@ -1,40 +1,46 @@
 version: 2.1
 
-executors:
-  java-executor:
-    docker:
-       - image: openjdk:17
-    working_directory: ~/repo
-
 jobs:
   build:
     docker:
-      - image: circleci/openjdk:17  # Ensure the image is correct
+      # Use the official OpenJDK 17 image from Docker Hub
+      - image: openjdk:17
     steps:
-      - checkout  # Check out the code
+      # Checkout the code from the repository
+      - checkout
+
+      # Set up Maven
       - run:
-          name: Build with Maven
-          command: mvn clean install  # Replace with the correct build tool
+          name: Set up Maven
+          command: |
+            curl -sSL https://get.sdkman.io | bash
+            source ~/.sdkman/bin/sdkman-init.sh
+            sdk install maven
 
-
+      # Build the project
+      - run:
+          name: Build the project
+          command: mvn clean install  # Replace with your actual build command (e.g., gradle build)
 
   sonar:
-    executor: java-executor
+    docker:
+      # Use the official OpenJDK 17 image for SonarQube analysis
+      - image: openjdk:17
     steps:
+      # Checkout the code again in the Sonar job
       - checkout
-      - run:
-          name: Install unzip (Debian-based)
-          command: |
-            sudo apt-get update && sudo apt-get install -y unzip
-      - run:
-          name: Install Maven dependencies
-          command: mvn install
+
+      # Run SonarQube Analysis
       - run:
           name: Run SonarQube Analysis
-          command: mvn sonar:sonar -Dsonar.projectKey=my-app -Dsonar.host.url=https://sonarcloud.io
+          command: |
+            mvn sonar:sonar -Dsonar.projectKey=my-app -Dsonar.host.url=https://sonarcloud.io
 
 workflows:
   version: 2
-  build_and_test:
+  build_and_analyze:
     jobs:
       - build
+      - sonar:
+          requires:
+            - build
