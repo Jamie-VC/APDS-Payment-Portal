@@ -1,38 +1,27 @@
+version: 2.1
+
+executors:
+  java-executor:
+    docker:
+      - image: circleci/openjdk:17-jdk  # Uses a CircleCI-supported Docker image with OpenJDK 17
+
 jobs:
   build:
     executor: java-executor
     steps:
       - checkout
       - run:
-          name: Install OpenJDK 17
-          command: |
-            sudo apt update
-            sudo apt install -y openjdk-17-jdk
-      - run:
-          name: Install Maven
-          command: |
-            sudo apt install -y maven
-      - run:
           name: Verify Java Version
           command: java -version
       - run:
           name: Run Tests
-          command: mvn clean test  # Adjust according to your test command
+          command: mvn clean test  # Your test command
 
   sonarcloud:
     docker:
-      - image: circleci/python:3.9
+      - image: circleci/openjdk:17-jdk
     steps:
       - checkout
-      - run:
-          name: Install OpenJDK 17
-          command: |
-            sudo apt update
-            sudo apt install -y openjdk-17-jdk
-      - run:
-          name: Install Maven
-          command: |
-            sudo apt install -y maven
       - run:
           name: Run SonarCloud Analysis
           command: |
@@ -41,3 +30,12 @@ jobs:
               -Dsonar.organization=Jamie-vc \
               -Dsonar.host.url=https://sonarcloud.io \
               -Dsonar.login=$SONAR_TOKEN
+
+workflows:
+  version: 2
+  build-and-sonarcloud:
+    jobs:
+      - build
+      - sonarcloud:
+          requires:
+            - build
