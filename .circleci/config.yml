@@ -3,7 +3,7 @@ version: 2.1
 executors:
   java-executor:
     docker:
-      - image: circleci/openjdk:17  # Use Java 17 for compatibility with your pom.xml
+       - image: openjdk:17
     working_directory: ~/repo
 
 jobs:
