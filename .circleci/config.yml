@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   sonarcloud:
     docker:
-      - image: circleci/openjdk:17
+      - image: cimg/openjdk:17.0  
     steps:
       - checkout
       - run:
