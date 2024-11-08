@@ -1,0 +1,50 @@
+version: 2.1
+
+executors:
+  java-executor:
+    docker:
+      - image: circleci/python:3.9
+    working_directory: ~/repo
+
+jobs:
+  build:
+    executor: java-executor
+    steps:
+      - checkout
+      - run:
+          name: Install OpenJDK 17
+          command: |
+            sudo apt update
+            sudo apt install -y openjdk-17-jdk
+      - run:
+          name: Verify Java Version
+          command: java -version
+      - run:
+          name: Run Tests
+          command: mvn clean test  # Adjust according to your test command
+
+  sonarcloud:
+    docker:
+      - image: circleci/python:3.9
+    steps:
+      - checkout
+      - run:
+          name: Install OpenJDK 17
+          command: |
+            sudo apt update
+            sudo apt install -y openjdk-17-jdk
+      - run:
+          name: Run SonarCloud Analysis
+          command: mvn clean verify sonar:sonar 
+          -Dsonar.projectKey=jamie-vc 
+          -Dsonar.organization=Jamie-vc
+          -Dsonar.host.url=https://sonarcloud.io
+
+workflows:
+  version: 2
+  build-and-sonarcloud:
+    jobs:
+      - build
+      - sonarcloud:
+          requires:
+            - build
