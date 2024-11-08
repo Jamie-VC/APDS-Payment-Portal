@@ -3,7 +3,7 @@ version: 2.1
 executors:
   java-executor:
     docker:
-      - image: openjdk:17  # You can also try other variants if needed
+      - image: circleci/openjdk:17-buster  # Explicitly Debian-based
     working_directory: ~/repo
 
 jobs:
@@ -12,8 +12,8 @@ jobs:
     steps:
       - checkout  # Check out the source code
       - run:
-          name: Install unzip (for Alpine)
-          command: apk add --no-cache unzip  # Use apk if it's an Alpine image
+          name: Install unzip (Debian-based)
+          command: apt-get update && apt-get install -y unzip  # Use apt-get for Debian
       - run:
           name: Set up Maven
           command: |
