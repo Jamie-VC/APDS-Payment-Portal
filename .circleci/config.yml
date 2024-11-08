@@ -1,42 +1,50 @@
 version: 2.1
 
-jobs:
-  sonarcloud:
+executors:
+  java-executor:
     docker:
-      - image: circleci/node:16  # Using Node.js Docker image
+      - image: circleci/python:3.9
+    working_directory: ~/repo
+
+jobs:
+  build:
+    executor: java-executor
     steps:
       - checkout
-
-      # Install SonarScanner if necessary
-      - run:
-          name: Install SonarScanner
-          command: |
-            curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
-            unzip sonar-scanner.zip
-            sudo mv sonar-scanner-4.6.2.2472-linux /opt/sonar-scanner
-            sudo ln -s /opt/sonar-scanner/bin/sonar-scanner /usr/local/bin/sonar-scanner
-
-      # Install Java 17 for SonarScanner (needed by SonarCloud)
       - run:
           name: Install OpenJDK 17
           command: |
-            sudo apt-get update
-            sudo apt-get install -y openjdk-17-jdk
-            sudo update-alternatives --config java
-            java -version
+            sudo apt update
+            sudo apt install -y openjdk-17-jdk
+      - run:
+          name: Verify Java Version
+          command: java -version
+      - run:
+          name: Run Tests
+          command: mvn clean test  # Adjust according to your test command
 
-      # Run SonarCloud analysis
+  sonarcloud:
+    docker:
+      - image: circleci/python:3.9
+    steps:
+      - checkout
+      - run:
+          name: Install OpenJDK 17
+          command: |
+            sudo apt update
+            sudo apt install -y openjdk-17-jdk
       - run:
           name: Run SonarCloud Analysis
-          command: |
-            sonar-scanner \
-              -Dsonar.projectKey=jamie-vc \
-              -Dsonar.organization=Jamie-VC \
-              -Dsonar.host.url=https://sonarcloud.io \
-              -Dsonar.login=$SONAR_TOKEN
+          command: mvn clean verify sonar:sonar 
+          -Dsonar.projectKey=jamie-vc 
+          -Dsonar.organization=Jamie-vc
+          -Dsonar.host.url=https://sonarcloud.io
 
 workflows:
   version: 2
-  sonarcloud:
+  build-and-sonarcloud:
     jobs:
-      - sonarcloud
+      - build
+      - sonarcloud:
+          requires:
+            - build
