@@ -3,44 +3,43 @@ version: 2.1
 jobs:
   build:
     docker:
-      # Use the official OpenJDK 17 image from Docker Hub
-      - image: openjdk:17
+      - image: circleci/openjdk:17  # Your base Docker image for Java
     steps:
-      # Checkout the code from the repository
+      # Checkout the code from the GitHub repository
       - checkout
 
-      # Set up Maven
+      # Install 'unzip' utility before anything else
       - run:
-          name: Set up Maven
-          command: |
-            curl -sSL https://get.sdkman.io | bash
-            source ~/.sdkman/bin/sdkman-init.sh
-            sdk install maven
+          name: Install unzip
+          command: sudo apt-get update && sudo apt-get install -y unzip
 
-      # Build the project
+      # Install SDKMAN (if required for SDK management)
       - run:
-          name: Build the project
-          command: mvn clean install  # Replace with your actual build command (e.g., gradle build)
+          name: Install SDKMAN
+          command: curl -sSL https://get.sdkman.io | bash
 
-  sonar:
-    docker:
-      # Use the official OpenJDK 17 image for SonarQube analysis
-      - image: openjdk:17
-    steps:
-      # Checkout the code again in the Sonar job
-      - checkout
+      # Initialize SDKMAN (if you're using SDKMAN to manage Java versions or other SDKs)
+      - run:
+          name: Source SDKMAN
+          command: source ~/.sdkman/bin/sdkman-init.sh
 
-      # Run SonarQube Analysis
+      # If you need to install or switch to a specific Java version, use SDKMAN
+      - run:
+          name: Install Java with SDKMAN
+          command: sdk install java 17.0.3-open
+
+      # Run your build commands here (e.g., Gradle, Maven)
+      - run:
+          name: Build project
+          command: ./gradlew build  # Or whatever build system you're using (e.g., Maven)
+
+      # Run SonarQube analysis (assuming you have SonarQube scanner setup)
       - run:
           name: Run SonarQube Analysis
-          command: |
-            mvn sonar:sonar -Dsonar.projectKey=my-app -Dsonar.host.url=https://sonarcloud.io
+          command: ./gradlew sonarqube -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${SONAR_TOKEN}
 
 workflows:
   version: 2
   build_and_analyze:
     jobs:
       - build
-      - sonar:
-          requires:
-            - build
