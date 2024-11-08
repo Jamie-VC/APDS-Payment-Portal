@@ -3,49 +3,40 @@ version: 2.1
 executors:
   java-executor:
     docker:
-      - image: circleci/python:3.9  # or another base image you are using
+      - image: circleci/openjdk:11  # Use appropriate Java version (11 in this case)
     working_directory: ~/repo
 
 jobs:
   build:
     executor: java-executor
     steps:
-      - checkout
+      - checkout  # Check out the source code
       - run:
-          name: Install OpenJDK 17
+          name: Set up Maven
           command: |
-            sudo apt update
-            sudo apt install -y openjdk-17-jdk maven  # Install Maven here
+            curl -sSL https://get.sdkman.io | bash
+            source ~/.sdkman/bin/sdkman-init.sh
+            sdk install maven
       - run:
-          name: Verify Java Version
-          command: java -version
-      - run:
-          name: Run Tests
-          command: mvn clean test  # Your test command
+          name: Build the project
+          command: mvn clean install
 
-  sonarcloud:
-    docker:
-      - image: circleci/python:3.9
+  sonar:
+    executor: java-executor
     steps:
       - checkout
       - run:
-          name: Install OpenJDK 17 and Maven
-          command: |
-            sudo apt update
-            sudo apt install -y openjdk-17-jdk maven
+          name: Install Maven dependencies
+          command: mvn install
       - run:
-          name: Run SonarCloud Analysis
-          command: |
-            mvn clean verify sonar:sonar \
-            -Dsonar.projectKey=jamie-vc \
-            -Dsonar.organization=Jamie-vc \
-            -Dsonar.host.url=https://sonarcloud.io
+          name: Run SonarQube Analysis
+          command: mvn sonar:sonar -Dsonar.projectKey=my-app -Dsonar.host.url=https://sonarcloud.io
 
 workflows:
   version: 2
-  build-and-sonarcloud:
+  build_and_analyze:
     jobs:
       - build
-      - sonarcloud:
+      - sonar:
           requires:
             - build
