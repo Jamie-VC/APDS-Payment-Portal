@@ -12,6 +12,9 @@ jobs:
     steps:
       - checkout  # Check out the source code
       - run:
+          name: Install unzip
+          command: sudo apt-get update && sudo apt-get install -y unzip  # Install unzip
+      - run:
           name: Set up Maven
           command: |
             curl -sSL https://get.sdkman.io | bash
