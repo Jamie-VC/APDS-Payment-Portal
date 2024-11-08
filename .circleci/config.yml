@@ -3,8 +3,8 @@ version: 2.1
 executors:
   java-executor:
     docker:
-      - image: circleci/python:3.9
-    working_directory: ~/repo
+      - image: circleci/openjdk:17-jdk
+    working_directory: ~/repo  # Assuming pom.xml is here
 
 jobs:
   build:
@@ -12,38 +12,16 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install OpenJDK 17
+          name: Verify Directory and Check POM
           command: |
-            sudo apt update
-            sudo apt install -y openjdk-17-jdk
-      - run:
-          name: Install Maven
-          command: |
-            sudo apt install -y maven
-      - run:
-          name: Verify Java Version
-          command: java -version
-      - run:
-          name: Verify Maven Version
-          command: mvn -v
-      - run:
-          name: Run Tests
-          command: mvn clean test  # Adjust according to your test command
+            ls -la  # Verify files in the directory
+            mvn clean test  # Run Maven tests if POM is found
 
   sonarcloud:
     docker:
-      - image: circleci/python:3.9
+      - image: circleci/openjdk:17-jdk
     steps:
       - checkout
-      - run:
-          name: Install OpenJDK 17
-          command: |
-            sudo apt update
-            sudo apt install -y openjdk-17-jdk
-      - run:
-          name: Install Maven
-          command: |
-            sudo apt install -y maven
       - run:
           name: Run SonarCloud Analysis
           command: |
