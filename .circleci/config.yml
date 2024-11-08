@@ -17,8 +17,15 @@ jobs:
             sudo apt update
             sudo apt install -y openjdk-17-jdk
       - run:
+          name: Install Maven
+          command: |
+            sudo apt install -y maven
+      - run:
           name: Verify Java Version
           command: java -version
+      - run:
+          name: Verify Maven Version
+          command: mvn -v
       - run:
           name: Run Tests
           command: mvn clean test  # Adjust according to your test command
@@ -33,6 +40,10 @@ jobs:
           command: |
             sudo apt update
             sudo apt install -y openjdk-17-jdk
+      - run:
+          name: Install Maven
+          command: |
+            sudo apt install -y maven
       - run:
           name: Run SonarCloud Analysis
           command: |
