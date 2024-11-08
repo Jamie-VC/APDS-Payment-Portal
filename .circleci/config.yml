@@ -8,18 +8,25 @@ executors:
 
 jobs:
   build:
-    executor: java-executor
+    docker:
+      - image: circleci/openjdk:17  # Ensure you're using the correct image for Java 17
     steps:
-      - checkout  # Check out the source code
+      - checkout  # Checkout the project
       - run:
-          name: Set up Maven
+          name: Install unzip
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y unzip
+      - run:
+          name: Set up SDKMAN and Maven
           command: |
             curl -sSL https://get.sdkman.io | bash
             source ~/.sdkman/bin/sdkman-init.sh
             sdk install maven
       - run:
-          name: Build the project
+          name: Build project with Maven
           command: mvn clean install
+
 
   sonar:
     executor: java-executor
