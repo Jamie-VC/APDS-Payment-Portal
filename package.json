@@ -1,11 +1,15 @@
 {
-<<<<<<< HEAD
   "dependencies": {
     "mongo-sanitize": "^1.1.0",
     "xss": "^1.0.15"
-=======
+  },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
->>>>>>> 5f19926525888a72c7cb0c08cbe5a7929ae50a62
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "concurrently": "^9.1.0"
+  },
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd customer-portal/backend && npm start",
+    "client": "cd customer-portal/frontend && npm start"
   }
 }
