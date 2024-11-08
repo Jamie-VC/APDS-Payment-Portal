@@ -35,7 +35,8 @@ jobs:
             sudo apt install -y openjdk-17-jdk
       - run:
           name: Run SonarCloud Analysis
-          command: mvn clean verify sonar:sonar \
+          command: |
+          mvn clean verify sonar:sonar \
           -Dsonar.projectKey=jamie-vc \
           -Dsonar.organization=Jamie-vc \
           -Dsonar.host.url=https://sonarcloud.io
