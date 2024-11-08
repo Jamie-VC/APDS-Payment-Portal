@@ -3,7 +3,7 @@ version: 2.1
 executors:
   java-executor:
     docker:
-      - image: circleci/openjdk:17-jdk  # Uses a CircleCI-supported Docker image with OpenJDK 17
+      - image: circleci/openjdk:17-jdk  # Defines a reusable executor with OpenJDK 17
 
 jobs:
   build:
@@ -18,8 +18,7 @@ jobs:
           command: mvn clean test  # Your test command
 
   sonarcloud:
-    docker:
-      - image: circleci/openjdk:17-jdk
+    executor: java-executor
     steps:
       - checkout
       - run:
