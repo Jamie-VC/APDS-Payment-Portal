@@ -3,7 +3,7 @@ version: 2.1
 executors:
   java-executor:
     docker:
-      - image: circleci/openjdk:17-jdk  # Defines a reusable executor with OpenJDK 17
+      - image: cimg/openjdk:17.0  # Updated to use the official CircleCI-maintained image
 
 jobs:
   build:
