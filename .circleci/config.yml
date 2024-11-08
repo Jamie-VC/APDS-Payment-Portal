@@ -3,7 +3,7 @@ version: 2.1
 executors:
   java-executor:
     docker:
-      - image: circleci/openjdk:17-buster  # Explicitly Debian-based
+      - image: circleci/openjdk:11  # Use appropriate Java version (11 in this case)
     working_directory: ~/repo
 
 jobs:
@@ -11,9 +11,6 @@ jobs:
     executor: java-executor
     steps:
       - checkout  # Check out the source code
-      - run:
-          name: Install unzip (Debian-based)
-          command: apt-get update && apt-get install -y unzip  # Use apt-get for Debian
       - run:
           name: Set up Maven
           command: |
@@ -28,6 +25,10 @@ jobs:
     executor: java-executor
     steps:
       - checkout
+      - run:
+          name: Install unzip (Debian-based)
+          command: |
+            sudo apt-get update && sudo apt-get install -y unzip
       - run:
           name: Install Maven dependencies
           command: mvn install
