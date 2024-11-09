@@ -5,6 +5,7 @@ import Login from './components/Login';
 import PaymentForm from './components/PaymentForm';
 import EmployeeLogin from './components/EmployeeLogin'; // Import Employee Login component
 import './App.css';
+import TransactionHistory from './components/TransactionHistory';
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -53,6 +54,7 @@ function App() {
 
                 <Routes>
                     <Route path="/signup" element={<Signup />} />
+                    <Route path="/employee/transactions" element={<TransactionHistory />} />
                     <Route path="/payment" element={<PaymentForm />} />
                 </Routes>
             </Router>

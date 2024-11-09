@@ -6,9 +6,14 @@ const https = require('https'); // Import https module
 const fs = require('fs'); // Import fs module for file system
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+// Importing employee routes
+const employeeRoutes = require('./routes/employeeRoutes');
 require('dotenv').config();
 
 const app = express();
+
+// Use employee routes
+app.use('/api/employees', employeeRoutes);
 
 // Protects against clickjacking and other vulnerabilities
 app.use(helmet());
@@ -33,7 +38,7 @@ const userRoutes = require('./routes/userRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 
 // Importing employee routes
-const employeeRoutes = require('./routes/employeeRoutes'); // Add this line
+const employeeRoutes = require('./routes/employeeRoutes'); 
 
 // Use user routes
 app.use('/api/users', userRoutes);
@@ -42,7 +47,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/payments', paymentRoutes);
 
 // Use employee routes
-app.use('/api/employees', employeeRoutes); // Add this line
+app.use('/api/employees', employeeRoutes); 
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
