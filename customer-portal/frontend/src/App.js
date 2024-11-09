@@ -4,6 +4,7 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 import PaymentForm from './components/PaymentForm';
 import EmployeeLogin from './components/EmployeeLogin';
+import TransactionHistory from './components/TransactionHistory';
 import './App.css';
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
                     <Route path="/" element={<p>Welcome to the Home Page!</p>} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/payment" element={<PaymentForm />} />
+                    <Route path="/transaction-history" element={<TransactionHistory />} />
                 </Routes>
             </Router>
         </div>
