@@ -3,30 +3,30 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import PaymentForm from './components/PaymentForm';
-import EmployeeLogin from './components/EmployeeLogin'; // Import Employee Login component
+import EmployeeLogin from './components/EmployeeLogin';
 import './App.css';
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [showSignup, setShowSignup] = useState(false); // State to control modal visibility
-    const [showLogin, setShowLogin] = useState(false);   // State to control login modal visibility
-    const [showEmployeeLogin, setShowEmployeeLogin] = useState(false); // State to control employee login modal visibility
+    const [showSignup, setShowSignup] = useState(false);
+    const [showLogin, setShowLogin] = useState(false);
+    const [showEmployeeLogin, setShowEmployeeLogin] = useState(false);
 
     const handleLogin = () => {
         setIsLoggedIn(true);
-        setShowLogin(false); // Close the login modal after successful login
+        setShowLogin(false);
     };
 
     const toggleSignupModal = () => {
-        setShowSignup(!showSignup); // Toggle the signup modal
+        setShowSignup(!showSignup);
     };
 
     const toggleLoginModal = () => {
-        setShowLogin(!showLogin); // Toggle the login modal visibility
+        setShowLogin(!showLogin);
     };
 
     const toggleEmployeeLoginModal = () => {
-        setShowEmployeeLogin(!showEmployeeLogin); // Toggle the employee login modal visibility
+        setShowEmployeeLogin(!showEmployeeLogin);
     };
 
     return (
@@ -37,21 +37,22 @@ function App() {
                     <nav>
                         <button onClick={toggleSignupModal}>Sign Up</button>
                         <button onClick={toggleLoginModal}>Login</button>
-                        <button onClick={toggleEmployeeLoginModal}>Employee Login</button> {/* Employee Login Button */}
+                        <button onClick={toggleEmployeeLoginModal}>Employee Login</button>
                         {isLoggedIn && <Link to="/payment">Make a Payment</Link>}
                     </nav>
                 </header>
 
                 {/* Conditionally render the Signup modal */}
                 {showSignup && <Signup closeModal={toggleSignupModal} />}
-                
+
                 {/* Conditionally render the Login modal */}
                 {showLogin && <Login onLogin={handleLogin} closeModal={toggleLoginModal} />}
-                
+
                 {/* Conditionally render the Employee Login modal */}
                 {showEmployeeLogin && <EmployeeLogin closeModal={toggleEmployeeLoginModal} />}
 
                 <Routes>
+                    <Route path="/" element={<p>Welcome to the Home Page!</p>} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/payment" element={<PaymentForm />} />
                 </Routes>

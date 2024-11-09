@@ -8,7 +8,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const rateLimit = require('express-rate-limit'); // Import rate limiter package
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://dbUser:nHQ9JkVF4V5Orinw@cluster0.f1tgoaw.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0";
 require('dotenv').config();
 
 const app = express();
@@ -41,35 +40,36 @@ app.use(helmet({
 }));
 
 
-// Use CORS middleware
+// Use CORS middleware with support for multiple origins
+const allowedOrigins = ['http://localhost:3000', 'https://localhost:3000'];
 app.use(cors({
-    origin: 'https://localhost:3000',
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps or Postman)
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    }
 }));
 
+// Parse JSON bodies
 app.use(express.json());
 
 // Middleware for logging requests
 app.use((req, res, next) => {
-    console.log(req.path, req.method);
+    console.log(`${req.method} ${req.path}`);
     next();
 });
 
-// Importing user routes
+// Importing routes
 const userRoutes = require('./routes/userRoutes');
-
-// Importing payment routes
 const paymentRoutes = require('./routes/paymentRoutes');
-
-// Importing employee routes
 const employeeRoutes = require('./routes/employeeRoutes'); // Add this line
 
-// Use user routes
+// Use routes
 app.use('/api/users', userRoutes);
-
-// Use payment routes
 app.use('/api/payments', paymentRoutes);
-
-// Use employee routes
 app.use('/api/employees', employeeRoutes); // Add this line
 
 // Connect to MongoDB
@@ -87,5 +87,5 @@ mongoose.connect(process.env.MONGO_URI)
         });
     })
     .catch((error) => {
-        console.log(error);
+        console.log('MongoDB connection error:', error);
     });
