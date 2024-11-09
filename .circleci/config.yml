@@ -6,10 +6,6 @@ jobs:
       - image: cimg/openjdk:17.0  # Updated to a valid image tag
     steps:
       - checkout
-            - run:
-          name: List available Java versions on SDKMAN
-          command: source $BASH_ENV && sdk list java
-
 
       - run:
           name: Install unzip
@@ -24,8 +20,12 @@ jobs:
           command: echo "source $HOME/.sdkman/bin/sdkman-init.sh" >> $BASH_ENV && source $BASH_ENV
 
       - run:
+          name: List available Java versions on SDKMAN
+          command: source $BASH_ENV && sdk list java
+
+      - run:
           name: Install Java with SDKMAN
-          command: sdk install java 17.0.3-open
+          command: sdk install java 17.0.7-open  # Replace with a valid version found in previous step
 
       - run:
           name: Build project
