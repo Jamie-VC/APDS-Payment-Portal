@@ -3,37 +3,30 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/openjdk:17  # Your base Docker image for Java
+      - image: cimg/openjdk:17.0  # Updated to a valid image tag
     steps:
-      # Checkout the code from the GitHub repository
       - checkout
 
-      # Install 'unzip' utility before anything else
       - run:
           name: Install unzip
           command: sudo apt-get update && sudo apt-get install -y unzip
 
-      # Install SDKMAN (if required for SDK management)
       - run:
           name: Install SDKMAN
           command: curl -sSL https://get.sdkman.io | bash
 
-      # Initialize SDKMAN (if you're using SDKMAN to manage Java versions or other SDKs)
       - run:
           name: Source SDKMAN
-          command: source ~/.sdkman/bin/sdkman-init.sh
+          command: echo "source $HOME/.sdkman/bin/sdkman-init.sh" >> $BASH_ENV && source $BASH_ENV
 
-      # If you need to install or switch to a specific Java version, use SDKMAN
       - run:
           name: Install Java with SDKMAN
           command: sdk install java 17.0.3-open
 
-      # Run your build commands here (e.g., Gradle, Maven)
       - run:
           name: Build project
-          command: ./gradlew build  # Or whatever build system you're using (e.g., Maven)
+          command: ./gradlew build
 
-      # Run SonarQube analysis (assuming you have SonarQube scanner setup)
       - run:
           name: Run SonarQube Analysis
           command: ./gradlew sonarqube -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${SONAR_TOKEN}
