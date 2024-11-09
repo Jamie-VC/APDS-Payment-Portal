@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "express-rate-limit": "^7.4.1",
     "mongo-sanitize": "^1.1.0",
     "xss": "^1.0.15"
   },

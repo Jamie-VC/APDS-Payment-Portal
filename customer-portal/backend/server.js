@@ -1,14 +1,25 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const helmet = require('helmet'); // Import helmet package for security headers
-const https = require('https'); // Import https module
-const fs = require('fs'); // Import fs module for file system
+const helmet = require('helmet');
+const https = require('https');
+const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const rateLimit = require('express-rate-limit'); // Import rate limiter package
 require('dotenv').config();
 
 const app = express();
+
+// Set up rate limiting
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per windowMs
+    message: "Too many requests from this IP, please try again after 15 minutes.",
+});
+
+// Apply the rate limiter to all requests
+app.use(limiter);
 
 // Protects against clickjacking and other vulnerabilities
 app.use(helmet());
