@@ -41,31 +41,33 @@ const EmployeeLogin = ({ closeModal }) => {
     };
 
     // Handle form submission
-    const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevent page reload on form submit
+    // Handle form submission
+const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent page reload on form submit
 
-        // Validate form inputs before submitting
-        if (!validateInputs()) {
-            return; // Stop submission if inputs are invalid
-        }
+    // Validate form inputs before submitting
+    if (!validateInputs()) {
+        return; // Stop submission if inputs are invalid
+    }
 
-        try {
-            const response = await axios.post('https://localhost:4000/api/employees/login', loginData); // POST request to backend
-            if (response.status === 200) {
-                console.log('Employee logged in successfully:', response.data.message);
-                closeModal(); // Close the modal after successful login
-                navigate('/dashboard', { state: { successMessage: `Logged in successfully as "${loginData.username}"!` } });
-            }
-        } catch (error) {
-            if (error.response) {
-                setErrorMessage(error.response.data.message || 'Login failed');
-                console.error('Login error:', error.response.data); // Log error if login fails
-            } else {
-                setErrorMessage('An unexpected error occurred');
-                console.error('Login error:', error.message);
-            }
+    try {
+        const response = await axios.post('https://localhost:4000/api/employees/login', loginData); // POST request to backend
+        if (response.status === 200) {
+            console.log('Employee logged in successfully:', response.data.message);
+            closeModal(); // Close the modal after successful login
+            navigate('/payment', { state: { successMessage: `Logged in successfully as "${loginData.username}"!` } });
         }
-    };
+    } catch (error) {
+        if (error.response) {
+            setErrorMessage(error.response.data.message || 'Login failed');
+            console.error('Login error:', error.response.data); // Log error if login fails
+        } else {
+            setErrorMessage('An unexpected error occurred');
+            console.error('Login error:', error.message);
+        }
+    }
+};
+
 
     // Close the modal when clicking outside of it
     useEffect(() => {
