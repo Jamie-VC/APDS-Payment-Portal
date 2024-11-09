@@ -22,7 +22,22 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // Protects against clickjacking and other vulnerabilities
-app.use(helmet());
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "trusted.com"], // Avoid 'unsafe-inline'
+            styleSrc: ["'self'"], // Avoid 'unsafe-inline'
+            objectSrc: ["'none'"], // Disables object elements (Flash, etc.)
+            imgSrc: ["'self'", "trusted.com"], // Only allow images from trusted domains
+            connectSrc: ["'self'"], // Controls where fetch, XHR, WebSocket requests can be made
+            fontSrc: ["'self'"], // Restrict fonts to the same origin
+            frameSrc: ["'none'"], // Disallow embedding in frames (clickjacking protection)
+        }
+    },
+    crossOriginEmbedderPolicy: "require-corp", // Enforces strict cross-origin policies
+}));
+
 
 // Use CORS middleware
 app.use(cors({
