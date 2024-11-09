@@ -44,7 +44,6 @@ app.use(helmet({
 const allowedOrigins = ['http://localhost:3000', 'https://localhost:3000'];
 app.use(cors({
     origin: (origin, callback) => {
-        // Allow requests with no origin (like mobile apps or Postman)
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
@@ -65,25 +64,25 @@ app.use((req, res, next) => {
 // Importing routes
 const userRoutes = require('./routes/userRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
-const employeeRoutes = require('./routes/employeeRoutes'); // Add this line
+const employeeRoutes = require('./routes/employeeRoutes'); 
 
 // Use routes
 app.use('/api/users', userRoutes);
 app.use('/api/payments', paymentRoutes);
-app.use('/api/employees', employeeRoutes); // Add this line
+app.use('/api/employees', employeeRoutes); 
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
         // Load SSL certificate and key
         const sslOptions = {
-            key: fs.readFileSync('./SSL/private.key'), // Update the path to your key file
-            cert: fs.readFileSync('./SSL/certificate.crt'), // Update the path to your certificate file
+            key: fs.readFileSync('./SSL/private.key'), // Path to private key file
+            cert: fs.readFileSync('./SSL/certificate.crt'), // Path to certificate file
         };
 
-        // Create HTTPS server
+        // Create HTTPS server and listen on the specified port
         https.createServer(sslOptions, app).listen(process.env.PORT, () => {
-            console.log('Listening on backend port', process.env.PORT);
+            console.log(`Listening on backend port ${process.env.PORT}`);
         });
     })
     .catch((error) => {
