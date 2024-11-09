@@ -6,6 +6,10 @@ jobs:
       - image: cimg/openjdk:17.0  # Updated to a valid image tag
     steps:
       - checkout
+            - run:
+          name: List available Java versions on SDKMAN
+          command: source $BASH_ENV && sdk list java
+
 
       - run:
           name: Install unzip
