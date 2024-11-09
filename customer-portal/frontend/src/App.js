@@ -40,6 +40,11 @@ function App() {
                         <button onClick={toggleLoginModal}>Login</button>
                         <button onClick={toggleEmployeeLoginModal}>Employee Login</button>
                         {isLoggedIn && <Link to="/payment">Make a Payment</Link>}
+
+                        {/* Home page button */}
+                        <Link to="/">
+                            <button>Home</button>
+                        </Link>
                     </nav>
                 </header>
 
