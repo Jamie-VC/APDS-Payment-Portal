@@ -7,6 +7,8 @@ const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const rateLimit = require('express-rate-limit'); // Import rate limiter package
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://dbUser:nHQ9JkVF4V5Orinw@cluster0.f1tgoaw.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0";
 require('dotenv').config();
 
 const app = express();

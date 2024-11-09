@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 const Employee = require('./models/Employee');
+
 require('dotenv').config();
+
+// Log the Employee model to verify the import
+console.log(Employee); // This should output the model definition if it's correctly imported
 
 mongoose.connect(process.env.MONGO_URI)
     .then(async () => {
@@ -14,6 +18,9 @@ mongoose.connect(process.env.MONGO_URI)
 
         // Hash passwords and insert into database
         for (const emp of employees) {
+            // Log the typeof to ensure `findOne` is a function
+            console.log(typeof Employee.findOne); // Should log 'function'
+
             const existingEmployee = await Employee.findOne({ username: emp.username });
             if (!existingEmployee) {
                 const newEmployee = new Employee(emp);

@@ -1,7 +1,10 @@
 {
   "dependencies": {
     "express-rate-limit": "^7.4.1",
+    "dotenv": "^16.4.5",
     "mongo-sanitize": "^1.1.0",
+    "mongodb": "^6.10.0",
+    "mongoose": "^8.8.1",
     "xss": "^1.0.15"
   },
   "devDependencies": {
