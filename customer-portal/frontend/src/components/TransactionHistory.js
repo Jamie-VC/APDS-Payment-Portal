@@ -7,7 +7,6 @@ const TransactionHistory = () => {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        // Make sure to use the correct URL for your backend
         const response = await axios.get('https://localhost:4000/api/payments/transactions');
         console.log('Fetched transactions:', response.data);  // Log the response to check data
         setTransactions(response.data);  // Set the fetched data in the state
