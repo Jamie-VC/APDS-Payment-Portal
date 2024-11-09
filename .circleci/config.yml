@@ -57,7 +57,7 @@ jobs:
           command: |
             mvn clean verify sonar:sonar \
               -Dsonar.projectKey=Jamie-VC_APDS-Payment-Portal \
-              -Dsonar.organization=Jamie-vc \
+              -Dsonar.organization=Jamie-VC \
               -Dsonar.host.url=https://sonarcloud.io
 
 workflows:
