@@ -32,11 +32,17 @@ const userRoutes = require('./routes/userRoutes');
 // Importing payment routes
 const paymentRoutes = require('./routes/paymentRoutes');
 
+// Importing employee routes
+const employeeRoutes = require('./routes/employeeRoutes'); // Add this line
+
 // Use user routes
 app.use('/api/users', userRoutes);
 
 // Use payment routes
 app.use('/api/payments', paymentRoutes);
+
+// Use employee routes
+app.use('/api/employees', employeeRoutes); // Add this line
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
