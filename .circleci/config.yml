@@ -1,42 +1,50 @@
 version: 2.1
 
+executors:
+  java-executor:
+    docker:
+      - image: circleci/python:3.9
+    working_directory: ~/repo
+
 jobs:
   build:
-    docker:
-      - image: cimg/openjdk:17.0  # Updated to a valid image tag
+    executor: java-executor
     steps:
       - checkout
-
       - run:
-          name: Install unzip
-          command: sudo apt-get update && sudo apt-get install -y unzip
-
+          name: Install OpenJDK 17
+          command: |
+            sudo apt update
+            sudo apt install -y openjdk-17-jdk
       - run:
-          name: Install SDKMAN
-          command: curl -sSL https://get.sdkman.io | bash
-
+          name: Verify Java Version
+          command: java -version
       - run:
-          name: Source SDKMAN
-          command: echo "source $HOME/.sdkman/bin/sdkman-init.sh" >> $BASH_ENV && source $BASH_ENV
+          name: Run Tests
+          command: mvn clean test  # Adjust according to your test command
 
+  sonarcloud:
+    docker:
+      - image: circleci/python:3.9
+    steps:
+      - checkout
       - run:
-          name: List available Java versions on SDKMAN
-          command: source $BASH_ENV && sdk list java
-
+          name: Install OpenJDK 17
+          command: |
+            sudo apt update
+            sudo apt install -y openjdk-17-jdk
       - run:
-          name: Install Java with SDKMAN
-          command: sdk install java 17.0.7-open  # Replace with a valid version found in previous step
-
-      - run:
-          name: Build project
-          command: ./gradlew build
-
-      - run:
-          name: Run SonarQube Analysis
-          command: ./gradlew sonarqube -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${SONAR_TOKEN}
+          name: Run SonarCloud Analysis
+          command: mvn clean verify sonar:sonar 
+          -Dsonar.projectKey=jamie-vc 
+          -Dsonar.organization=Jamie-vc
+          -Dsonar.host.url=https://sonarcloud.io
 
 workflows:
   version: 2
-  build_and_analyze:
+  build-and-sonarcloud:
     jobs:
       - build
+      - sonarcloud:
+          requires:
+            - build
