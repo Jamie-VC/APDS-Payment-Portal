@@ -15,7 +15,7 @@
         <!-- SonarCloud project key -->
         <sonar.projectKey>my-app</sonar.projectKey>
         <!-- SonarCloud organization key -->
-        <sonar.organization>Jamie-VC</sonar.organization>  <!-- Add this line -->
+        <sonar.organization>jamie-vc</sonar.organization>  <!-- Add this line -->
         <!-- Corrected sonar host URL -->
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
