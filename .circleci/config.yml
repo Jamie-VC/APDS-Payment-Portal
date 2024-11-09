@@ -11,14 +11,24 @@ jobs:
     executor: java-executor
     steps:
       - checkout
+
+      # Install OpenJDK 17
       - run:
           name: Install OpenJDK 17
           command: |
             sudo apt update
             sudo apt install -y openjdk-17-jdk
+
+      # Install Maven
+      - run:
+          name: Install Maven
+          command: |
+            sudo apt install -y maven
+
       - run:
           name: Verify Java Version
           command: java -version
+
       - run:
           name: Run Tests
           command: mvn clean test  # Adjust according to your test command
@@ -28,11 +38,20 @@ jobs:
       - image: circleci/python:3.9
     steps:
       - checkout
+
+      # Install OpenJDK 17
       - run:
           name: Install OpenJDK 17
           command: |
             sudo apt update
             sudo apt install -y openjdk-17-jdk
+
+      # Install Maven
+      - run:
+          name: Install Maven
+          command: |
+            sudo apt install -y maven
+
       - run:
           name: Run SonarCloud Analysis
           command: |
