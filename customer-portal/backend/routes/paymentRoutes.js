@@ -20,5 +20,14 @@ router.post('/', async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+// Route to get all transactions (GET route)
+router.get('/transactions', async (req, res) => {
+  try {
+    const transactions = await Payment.find({});  // Fetch all payments from the 'payments' collection
+    res.status(200).json(transactions);  // Return the transactions in the response
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching transactions', error });
+  }
+});
 
 module.exports = router;
