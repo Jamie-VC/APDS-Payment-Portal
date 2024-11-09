@@ -75,7 +75,7 @@ mongoose.connect(process.env.MONGO_URI)
 
         // Create HTTPS server
         https.createServer(sslOptions, app).listen(process.env.PORT, () => {
-            console.log('Listening on port', process.env.PORT);
+            console.log('Listening on backend port', process.env.PORT);
         });
     })
     .catch((error) => {
