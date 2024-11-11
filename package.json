@@ -11,9 +11,10 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "concurrently": "^9.1.0"
   },
-  "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
+ "scripts": {
+    "start": "npm run install-dependencies && concurrently \"npm run server\" \"npm run client\"",
+    "install-dependencies": "cd customer-portal/backend && npm install && cd ../frontend && npm install",
     "server": "cd customer-portal/backend && npm start",
     "client": "cd customer-portal/frontend && npm start"
-  }
+}
 }
