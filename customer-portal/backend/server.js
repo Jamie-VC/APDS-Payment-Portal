@@ -7,7 +7,6 @@ const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const rateLimit = require('express-rate-limit'); // Import rate limiter package
-const { MongoClient, ServerApiVersion } = require('mongodb');
 require('dotenv').config();
 
 const app = express();
@@ -38,7 +37,6 @@ app.use(helmet({
     },
     crossOriginEmbedderPolicy: "require-corp", // Enforces strict cross-origin policies
 }));
-
 
 // Use CORS middleware with support for multiple origins
 const allowedOrigins = ['http://localhost:3000', 'https://localhost:3000'];
@@ -78,6 +76,8 @@ mongoose.connect(process.env.MONGO_URI)
         const sslOptions = {
             key: fs.readFileSync('./SSL/private.key'), // Path to private key file
             cert: fs.readFileSync('./SSL/certificate.crt'), // Path to certificate file
+            // Disable SSL certificate validation
+            rejectUnauthorized: false
         };
 
         // Create HTTPS server and listen on the specified port
